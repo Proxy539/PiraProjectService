@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ps aux:*)",
+      "Bash(./gradlew compileJava 2>&1)",
+      "Bash(./gradlew clean:*)",
+      "Bash(./gradlew test:*)",
+      "Bash(jar tf:*)"
+    ]
+  }
+}

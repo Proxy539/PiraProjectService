@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: pira
+  datasource:
+    url: jdbc:postgresql://localhost:5432/piradb
+    username: pira
+    password: pirapassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect

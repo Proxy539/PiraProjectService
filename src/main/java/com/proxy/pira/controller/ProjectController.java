@@ -1,0 +1,57 @@
+package com.proxy.pira.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.proxy.pira.dto.SaveProjectDto;
+import com.proxy.pira.dto.ProjectDto;
+import com.proxy.pira.dto.UpdateProjectDto;
+import com.proxy.pira.service.ProjectService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/v1/projects")
+@RequiredArgsConstructor
+public class ProjectController {
+
+    private final ProjectService projectService;
+
+    @GetMapping
+    public List<ProjectDto> findAllProjects() {
+        return projectService.findAllProjects();
+    }
+
+    @GetMapping("/{projectId}")
+    public ProjectDto findProjectById(@PathVariable Long projectId) {
+        return projectService.findProjectById(projectId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProjectDto saveProject(@RequestBody SaveProjectDto saveProjectDto) {
+        return projectService.saveProject(saveProjectDto);
+    }
+
+    @PutMapping
+    public ProjectDto updateProject(@RequestBody UpdateProjectDto updateProjectDto) {
+        return projectService.updateProject(updateProjectDto);
+    }
+
+    @DeleteMapping("/{projectId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProject(@PathVariable Long projectId) {
+        projectService.deleteProject(projectId);
+    }
+
+}
