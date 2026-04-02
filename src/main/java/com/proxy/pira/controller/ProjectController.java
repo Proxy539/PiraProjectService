@@ -18,6 +18,7 @@ import com.proxy.pira.dto.ProjectDto;
 import com.proxy.pira.dto.UpdateProjectDto;
 import com.proxy.pira.service.ProjectService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -39,12 +40,12 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectDto saveProject(@RequestBody SaveProjectDto saveProjectDto) {
+    public ProjectDto saveProject(@RequestBody @Valid SaveProjectDto saveProjectDto) {
         return projectService.saveProject(saveProjectDto);
     }
 
     @PutMapping
-    public ProjectDto updateProject(@RequestBody UpdateProjectDto updateProjectDto) {
+    public ProjectDto updateProject(@RequestBody @Valid UpdateProjectDto updateProjectDto) {
         return projectService.updateProject(updateProjectDto);
     }
 

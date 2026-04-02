@@ -2,8 +2,10 @@ package com.proxy.pira.utils;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration;
+import org.springframework.http.HttpStatus;
 
+import com.proxy.pira.controller.ControllerAdvice;
+import com.proxy.pira.dto.ErrorResponseDTO;
 import com.proxy.pira.dto.ProjectDto;
 import com.proxy.pira.dto.SaveProjectDto;
 import com.proxy.pira.dto.UpdateProjectDto;
@@ -14,6 +16,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ProjectUtils {
 
+    private static final String DESCRIPTION_MUST_NOT_BE_BLANK_VALIDATION_ERROR_MESSAGE = "description: must not be blank";
+    private static final String TITLE_MUST_NOT_BE_BLANK_VALIDATION_ERROR_MESSAGE = "title: must not be blank";
+    public static final String VALIDATION_FAILED_ERROR_MESSAGE = "Validation failed";
     public static final Long PROJECT_1_ID = 1L;
     public static final Long PROJECT_2_ID = 2L;
     public static final Long PROJECT_3_ID = 3L;
@@ -116,5 +121,14 @@ public class ProjectUtils {
             .description(projectDescription)
             .build();
     }
-    
+
+    public static ErrorResponseDTO buildValidationErrorResponseDTO() {
+        return ErrorResponseDTO.builder()
+            .service(ControllerAdvice.PIRA_SERVICE_NAME)
+            .status(HttpStatus.BAD_REQUEST.value())
+            .message(VALIDATION_FAILED_ERROR_MESSAGE)
+            .validationErrors(List.of(TITLE_MUST_NOT_BE_BLANK_VALIDATION_ERROR_MESSAGE, DESCRIPTION_MUST_NOT_BE_BLANK_VALIDATION_ERROR_MESSAGE))
+            .build();
+    }
+
 }
