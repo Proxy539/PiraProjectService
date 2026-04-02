@@ -1,5 +1,6 @@
 package com.proxy.pira.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SaveProjectDto extends RequestDto {
 
+    @NotBlank
     private String title;
+    @NotBlank
     private String description;
     
 }
