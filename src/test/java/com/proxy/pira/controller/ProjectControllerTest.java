@@ -5,6 +5,7 @@ import static com.proxy.pira.utils.ProjectUtils.buildProjectDto;
 import static com.proxy.pira.utils.ProjectUtils.buildProjectDtos;
 import static com.proxy.pira.utils.ProjectUtils.buildSaveProjectDto;
 import static com.proxy.pira.utils.ProjectUtils.buildUpdateProjectDtoWithId;
+import static com.proxy.pira.utils.ProjectUtils.buildValidationErrorResponseDTO;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -26,6 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.proxy.pira.dto.ErrorResponseDTO;
 import com.proxy.pira.dto.ProjectDto;
+import com.proxy.pira.dto.SaveProjectDto;
+import com.proxy.pira.dto.UpdateProjectDto;
 import com.proxy.pira.exception.ResourceNotFoundException;
 import com.proxy.pira.service.ProjectService;
 
@@ -127,8 +130,6 @@ public class ProjectControllerTest {
         verify(projectService).saveProject(saveProjectDto);
     }
 
-    // @TODO add the validation error test when the validation is added
-
     @Test
     public void givenProjectInDatabaseWhenUpdateProjectThenReturnUpdatedProject() throws Exception {
         final var updateProjectDto = buildUpdateProjectDtoWithId();
@@ -145,7 +146,29 @@ public class ProjectControllerTest {
         verify(projectService).updateProject(updateProjectDto);
     }
 
-    // @TODO add the validation eerror test when the validation is added
+    @Test
+    public void givenNoProjectInDatabaseWhenSaveInvalidProjectThenReturnValidationErrors() throws Exception {
+        final var saveProjectDto = SaveProjectDto.builder().build();
+        final var errorBody = buildValidationErrorResponseDTO();
+
+        mockMvc.perform(post(POST_PROJECTS_URL)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(saveProjectDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(objectMapper.writeValueAsString(errorBody)));
+    }
+
+    @Test
+    public void givenNoProjectInDatabaseWhenUpdateInvalidProjectThenReturnValidationErrors() throws Exception {
+        final var updateProjectDto = UpdateProjectDto.builder().build();
+        final var errorBody = buildValidationErrorResponseDTO();
+
+        mockMvc.perform(put(PUT_PROJECTS_URL)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateProjectDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(objectMapper.writeValueAsString(errorBody)));
+    }
 
     @Test
     public void givenProjetInDatabaseWhenDeleteProjectThenDeleteProject() throws Exception {
