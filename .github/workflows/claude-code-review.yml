@@ -42,5 +42,4 @@ jobs:
             Also do the following: 
             1. Update the pull request description with a summary of all changes, review report and merge readiness verdict' 
             # or https://code.claude.com/docs/en/cli-reference for available options
-
           claude_args: '--allowed-tools Bash(gh pr:*)'
