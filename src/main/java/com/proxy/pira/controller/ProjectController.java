@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proxy.pira.dto.SaveProjectDto;
+import com.proxy.pira.dto.TicketDto;
 import com.proxy.pira.dto.ProjectDto;
 import com.proxy.pira.dto.UpdateProjectDto;
 import com.proxy.pira.service.ProjectService;
@@ -36,6 +37,11 @@ public class ProjectController {
     @GetMapping("/{projectId}")
     public ProjectDto findProjectById(@PathVariable Long projectId) {
         return projectService.findProjectById(projectId);
+    }
+
+    @GetMapping("/{projectId}/tickets")
+    public List<TicketDto> findProjectTickets(@PathVariable Long projectId) {
+        return projectService.findProjectTickets(projectId);
     }
 
     @PostMapping

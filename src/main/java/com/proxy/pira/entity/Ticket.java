@@ -1,7 +1,5 @@
 package com.proxy.pira.entity;
 
-import com.proxy.pira.entities.Project;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
