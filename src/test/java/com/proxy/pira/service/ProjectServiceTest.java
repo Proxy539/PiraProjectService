@@ -322,7 +322,7 @@ public class ProjectServiceTest {
 
         assertThatThrownBy(() -> projectService.updateProjectTicket(PROJECT_1_ID, updateTicketDto))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Ticket was not found by id {}" + TICKET_1_ID);
+                .hasMessage("Ticket was not found by id " + TICKET_1_ID);
 
         verify(ticketRepository).findByProjectIdAndId(PROJECT_1_ID, TICKET_1_ID);
     }
