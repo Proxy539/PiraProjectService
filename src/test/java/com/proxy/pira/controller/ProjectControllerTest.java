@@ -6,6 +6,12 @@ import static com.proxy.pira.utils.ProjectUtils.buildProjectDtos;
 import static com.proxy.pira.utils.ProjectUtils.buildSaveProjectDto;
 import static com.proxy.pira.utils.ProjectUtils.buildUpdateProjectDtoWithId;
 import static com.proxy.pira.utils.ProjectUtils.buildValidationErrorResponseDTO;
+import static com.proxy.pira.utils.TicketUtils.TICKET_1_ID;
+import static com.proxy.pira.utils.TicketUtils.buildSaveTicketDto;
+import static com.proxy.pira.utils.TicketUtils.buildTicketDto;
+import static com.proxy.pira.utils.TicketUtils.buildTicketDtos;
+import static com.proxy.pira.utils.TicketUtils.buildTicketValidationErrorResponseDTO;
+import static com.proxy.pira.utils.TicketUtils.buildUpdateTicketDtoWithId;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -28,6 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.proxy.pira.dto.ErrorResponseDTO;
 import com.proxy.pira.dto.ProjectDto;
 import com.proxy.pira.dto.SaveProjectDto;
+import com.proxy.pira.dto.SaveTicketDto;
 import com.proxy.pira.dto.UpdateProjectDto;
 import com.proxy.pira.exception.ResourceNotFoundException;
 import com.proxy.pira.service.ProjectService;
@@ -42,6 +49,10 @@ public class ProjectControllerTest {
     private static final String POST_PROJECTS_URL = "/api/v1/projects";
     private static final String PUT_PROJECTS_URL = "/api/v1/projects";
     private static final String DELETE_PROJECTS_URL = "/api/v1/projects/{id}";
+    private static final String GET_PROJECT_TICKETS_URL = "/api/v1/projects/{projectId}/tickets";
+    private static final String POST_PROJECT_TICKETS_URL = "/api/v1/projects/{projectId}/tickets";
+    private static final String PUT_PROJECT_TICKETS_URL = "/api/v1/projects/{projectId}/tickets";
+    private static final String DELETE_PROJECT_TICKET_URL = "/api/v1/projects/{projectId}/tickets/{ticketId}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -178,6 +189,74 @@ public class ProjectControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(projectService).deleteProject(PROJECT_1_ID);
+    }
+
+    @Test
+    public void givenTicketsForProjectWhenFindProjectTicketsThenReturnTickets() throws Exception {
+        final var ticketDtos = buildTicketDtos();
+
+        when(projectService.findProjectTickets(PROJECT_1_ID)).thenReturn(ticketDtos);
+
+        mockMvc.perform(get(GET_PROJECT_TICKETS_URL, PROJECT_1_ID)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(ticketDtos)));
+
+        verify(projectService).findProjectTickets(PROJECT_1_ID);
+    }
+
+    @Test
+    public void givenProjectInDatabaseWhenSaveTicketThenReturnSavedTicket() throws Exception {
+        final var saveTicketDto = buildSaveTicketDto();
+        final var ticketDto = buildTicketDto();
+
+        when(projectService.saveProjectTicket(PROJECT_1_ID, saveTicketDto)).thenReturn(ticketDto);
+
+        mockMvc.perform(post(POST_PROJECT_TICKETS_URL, PROJECT_1_ID)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(saveTicketDto)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(ticketDto)));
+
+        verify(projectService).saveProjectTicket(PROJECT_1_ID, saveTicketDto);
+    }
+
+    @Test
+    public void givenInvalidTicketWhenSaveTicketThenReturnValidationErrors() throws Exception {
+        final var saveTicketDto = SaveTicketDto.builder().build();
+        final var errorBody = buildTicketValidationErrorResponseDTO();
+
+        mockMvc.perform(post(POST_PROJECT_TICKETS_URL, PROJECT_1_ID)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(saveTicketDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(objectMapper.writeValueAsString(errorBody)));
+    }
+
+    @Test
+    public void givenTicketInDatabaseWhenUpdateTicketThenReturnUpdatedTicket() throws Exception {
+        final var updateTicketDto = buildUpdateTicketDtoWithId();
+        final var ticketDto = buildTicketDto();
+
+        when(projectService.updateProjectTicket(PROJECT_1_ID, updateTicketDto)).thenReturn(ticketDto);
+
+        mockMvc.perform(put(PUT_PROJECT_TICKETS_URL, PROJECT_1_ID)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateTicketDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(ticketDto)));
+
+        verify(projectService).updateProjectTicket(PROJECT_1_ID, updateTicketDto);
+    }
+
+    @Test
+    public void givenTicketInDatabaseWhenDeleteTicketThenReturnNoContent() throws Exception {
+
+        mockMvc.perform(delete(DELETE_PROJECT_TICKET_URL, PROJECT_1_ID, TICKET_1_ID)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(projectService).deleteProjectTicket(PROJECT_1_ID, TICKET_1_ID);
     }
 
 }
