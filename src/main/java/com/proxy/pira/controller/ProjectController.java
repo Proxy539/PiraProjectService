@@ -64,8 +64,8 @@ public class ProjectController {
     }
 
     @PutMapping("/{projectId}/tickets")
-    public TicketDto updateTicket(@PathVariable Long projectId, @RequestBody @Valid UpdateTicketDto updateTicektDto) {
-        return projectService.updateProjectTicket(projectId, updateTicektDto);
+    public TicketDto updateTicket(@PathVariable Long projectId, @RequestBody @Valid UpdateTicketDto updateTicketDto) {
+        return projectService.updateProjectTicket(projectId, updateTicketDto);
     }
 
     @DeleteMapping("/{projectId}")
@@ -76,7 +76,7 @@ public class ProjectController {
 
     @DeleteMapping("/{projectId}/tickets/{ticketId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTickcet(@PathVariable Long projectId, @PathVariable Long ticketId) {
+    public void deleteTicket(@PathVariable Long projectId, @PathVariable Long ticketId) {
         projectService.deleteProjectTicket(projectId, ticketId);
     }
 

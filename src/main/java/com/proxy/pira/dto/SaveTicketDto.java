@@ -15,6 +15,6 @@ public class SaveTicketDto {
     @NotBlank
     private String title;
     @NotBlank
-    private String desctipion;
+    private String description;
 
 }

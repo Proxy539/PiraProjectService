@@ -27,7 +27,7 @@ public class TicketUtils {
     public static final TicketStatus TICKET_1_STATUS = TicketStatus.NEW;
 
     private static final String TITLE_MUST_NOT_BE_BLANK = "title: must not be blank";
-    private static final String DESCTIPION_MUST_NOT_BE_BLANK = "desctipion: must not be blank";
+    private static final String DESCRIPTION_MUST_NOT_BE_BLANK = "description: must not be blank";
 
     public static Ticket buildTicket() {
         return Ticket.builder()
@@ -60,7 +60,7 @@ public class TicketUtils {
     public static SaveTicketDto buildSaveTicketDto() {
         return SaveTicketDto.builder()
                 .title(TICKET_1_TITLE)
-                .desctipion(TICKET_1_DESCRIPTION)
+                .description(TICKET_1_DESCRIPTION)
                 .build();
     }
 
@@ -101,7 +101,7 @@ public class TicketUtils {
                 .service(ControllerAdvice.PIRA_SERVICE_NAME)
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(ProjectUtils.VALIDATION_FAILED_ERROR_MESSAGE)
-                .validationErrors(List.of(TITLE_MUST_NOT_BE_BLANK, DESCTIPION_MUST_NOT_BE_BLANK))
+                .validationErrors(List.of(TITLE_MUST_NOT_BE_BLANK, DESCRIPTION_MUST_NOT_BE_BLANK))
                 .build();
     }
 
