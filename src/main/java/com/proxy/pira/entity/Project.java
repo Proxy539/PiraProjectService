@@ -28,7 +28,7 @@ public class Project {
 
     private String description;
 
-    @OneToMany(mappedBy = "project_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
 
 }

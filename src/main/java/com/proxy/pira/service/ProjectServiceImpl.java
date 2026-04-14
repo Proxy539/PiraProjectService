@@ -73,6 +73,7 @@ class ProjectServiceImpl implements ProjectService {
 
         final var ticket = ticketMapper.toTicket(saveTicketDto);
 
+        ticket.setProject(project);
         project.getTickets().add(ticket);
 
         projectRepository.save(project);
@@ -131,7 +132,7 @@ class ProjectServiceImpl implements ProjectService {
                     .findByProjectIdAndId(updateTicketDto.getProjectId(), updateTicketDto.getId())
                     .map(savedTicket -> ticketMapper.updateTicket(updateTicketDto, savedTicket))
                     .orElseThrow(() -> new ResourceNotFoundException(
-                            "Ticket was not found by id {}" + updateTicketDto.getId()));
+                            "Ticket was not found by id " + updateTicketDto.getId()));
 
             ticketRepository.save(ticket);
 
