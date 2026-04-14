@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateProjectDto extends RequestDto {
 
-    private Long id;
     @NotBlank
     private String title;
     @NotBlank
