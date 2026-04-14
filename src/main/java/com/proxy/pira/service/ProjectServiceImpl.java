@@ -65,10 +65,8 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public TicketDto saveProjectTicket(SaveTicketDto saveTicketDto) {
+    public TicketDto saveProjectTicket(Long projectId, SaveTicketDto saveTicketDto) {
         log.info("Saving prject ticket: {}", saveTicketDto);
-
-        final var projectId = saveTicketDto.getProjectId();
 
         final var project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Project was not found by id " + projectId));
@@ -96,13 +94,12 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public TicketDto updateProjectTicket(UpdateTicketDto updateTicketDto) {
+    public TicketDto updateProjectTicket(Long projectId, UpdateTicketDto updateTicketDto) {
         log.info("Updating project ticket data: {}", updateTicketDto);
         
-        final var savedTicket = saveOrUpdateTicket(updateTicketDto);
+        final var savedTicket = saveOrUpdateTicket(projectId, updateTicketDto);
 
         return ticketMapper.toTicketDto(savedTicket);
-
 
     }
 
@@ -118,11 +115,11 @@ class ProjectServiceImpl implements ProjectService {
         ticketRepository.deleteByProjectIdAndId(projectId, ticketId);
     }
 
-    private Ticket saveOrUpdateTicket(UpdateTicketDto updateTicketDto) {
+    private Ticket saveOrUpdateTicket(Long projectId, UpdateTicketDto updateTicketDto) {
         if (updateTicketDto.getId() == null) {
             final var ticket = ticketMapper.toTicket(updateTicketDto);
 
-            final var savedProject = projectRepository.findById(updateTicketDto.getProjectId())
+            final var savedProject = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Project was not found by id " + updateTicketDto.getProjectId()));
 
             savedProject.getTickets().add(ticket);

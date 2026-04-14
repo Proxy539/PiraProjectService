@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proxy.pira.dto.SaveProjectDto;
+import com.proxy.pira.dto.SaveTicketDto;
 import com.proxy.pira.dto.TicketDto;
 import com.proxy.pira.dto.ProjectDto;
 import com.proxy.pira.dto.UpdateProjectDto;
+import com.proxy.pira.dto.UpdateTicketDto;
 import com.proxy.pira.service.ProjectService;
 
 import jakarta.validation.Valid;
@@ -50,15 +52,32 @@ public class ProjectController {
         return projectService.saveProject(saveProjectDto);
     }
 
+    @PostMapping("/{projectId}/tickets")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TicketDto saveTicket(@PathVariable Long projectId, @RequestBody @Valid SaveTicketDto saveTicketDto) {
+        return projectService.saveProjectTicket(projectId, saveTicketDto);
+    }
+
     @PutMapping
     public ProjectDto updateProject(@RequestBody @Valid UpdateProjectDto updateProjectDto) {
         return projectService.updateProject(updateProjectDto);
+    }
+
+    @PutMapping("/{projectId}/tickets")
+    public TicketDto updateTicket(@PathVariable Long projectId, @RequestBody @Valid UpdateTicketDto updateTicektDto) {
+        return projectService.updateProjectTicket(projectId, updateTicektDto);
     }
 
     @DeleteMapping("/{projectId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProject(@PathVariable Long projectId) {
         projectService.deleteProject(projectId);
+    }
+
+    @DeleteMapping("/{projectId}/tickets/{ticketId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTickcet(@PathVariable Long projectId, @PathVariable Long ticketId) {
+        projectService.deleteProjectTicket(projectId, ticketId);
     }
 
 }

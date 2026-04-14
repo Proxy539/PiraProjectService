@@ -25,8 +25,8 @@ public interface ProjectService {
 
     void deleteProjectTicket(Long projectId, Long ticketId);
 
-    TicketDto updateProjectTicket(UpdateTicketDto updateTicketDto);
+    TicketDto updateProjectTicket(Long projectId, UpdateTicketDto updateTicketDto);
 
-    TicketDto saveProjectTicket(SaveTicketDto saveTicketDto);
+    TicketDto saveProjectTicket(Long projectId, SaveTicketDto saveTicketDto);
 
 }

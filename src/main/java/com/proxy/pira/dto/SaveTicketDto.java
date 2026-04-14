@@ -18,7 +18,5 @@ public class SaveTicketDto {
     private String title;
     @NotBlank
     private String desctipion;
-    @NotNull
-    private Long projectId;
     
 }
