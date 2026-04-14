@@ -19,7 +19,7 @@ public interface ProjectService {
 
     ProjectDto saveProject(SaveProjectDto saveProjectDto);
 
-    ProjectDto updateProject(UpdateProjectDto updateProjectDto);
+    ProjectDto updateProject(Long projectId, UpdateProjectDto updateProjectDto);
 
     void deleteProject(Long projectId);
 

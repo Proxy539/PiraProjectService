@@ -83,12 +83,15 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto updateProject(UpdateProjectDto updateProjectDto) {
+    public ProjectDto updateProject(Long projectId, UpdateProjectDto updateProjectDto) {
         log.info("Updating project data: {}", updateProjectDto);
 
-        final var saveOrUpdateProject = saveOrUpdateProject(updateProjectDto);
+        final var updatedProject =  projectRepository.findById(projectId)
+            .map(savedProject -> projectMapper.updateProject(updateProjectDto, savedProject))
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "Project was not found by id " + projectId));
 
-        final var savedProject = projectRepository.save(saveOrUpdateProject);
+        final var savedProject = projectRepository.save(updatedProject);
 
         return projectMapper.toProjectDto(savedProject);
 
@@ -139,18 +142,6 @@ class ProjectServiceImpl implements ProjectService {
             return ticket;
 
         }
-    }
-
-    private Project saveOrUpdateProject(UpdateProjectDto updateProjectDto) {
-        if (updateProjectDto.getId() == null) {
-            return projectMapper.toProject(updateProjectDto);
-        } else {
-            return projectRepository.findById(updateProjectDto.getId())
-                    .map(savedProject -> projectMapper.updateProject(updateProjectDto, savedProject))
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Project was not found by id " + updateProjectDto.getId()));
-        }
-
     }
 
 }

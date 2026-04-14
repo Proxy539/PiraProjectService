@@ -27,7 +27,6 @@ import static com.proxy.pira.utils.ProjectUtils.buildProjectDtos;
 import static com.proxy.pira.utils.ProjectUtils.buildProjects;
 import static com.proxy.pira.utils.ProjectUtils.buildSaveProjectDto;
 import static com.proxy.pira.utils.ProjectUtils.buildUpdateProjectDto;
-import static com.proxy.pira.utils.ProjectUtils.buildUpdateProjectDtoWithId;
 import static com.proxy.pira.utils.TicketUtils.TICKET_1_ID;
 import static com.proxy.pira.utils.TicketUtils.buildProjectWithTickets;
 import static com.proxy.pira.utils.TicketUtils.buildSaveTicketDto;
@@ -137,31 +136,12 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void givenNoProjectInDatabaseWhenUpdateProjectWithoutIdThenReturnSavedProject() {
+    public void givenNoProjectInDatabaseWhenUpdateProjectThenThrowResourceNotFoundException() {
         final var updateProjectDto = buildUpdateProjectDto();
-        final var project = buildProject();
-        final var projectDto = buildProjectDto();
-
-        when(projectMapper.toProject(updateProjectDto)).thenReturn(project);
-        when(projectRepository.save(project)).thenReturn(project);
-        when(projectMapper.toProjectDto(project)).thenReturn(projectDto);
-
-        final var result = projectService.updateProject(updateProjectDto);
-
-        assertThat(result).isEqualTo(projectDto);
-
-        verify(projectMapper).toProject(updateProjectDto);
-        verify(projectRepository).save(project);
-        verify(projectMapper).toProjectDto(project);
-    }
-
-    @Test
-    public void givenNoProjectInDatabaseWhenUpdateProjectWithIdThenThrowResouceNotFoundException() {
-        final var updateProjectDto = buildUpdateProjectDtoWithId();
 
         when(projectRepository.findById(PROJECT_1_ID)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> projectService.updateProject(updateProjectDto))
+        assertThatThrownBy(() -> projectService.updateProject(PROJECT_1_ID, updateProjectDto))
             .isInstanceOf(ResourceNotFoundException.class)
             .hasMessage("Project was not found by id " + PROJECT_1_ID);
 
@@ -169,8 +149,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void givenProjectInDatabseWhenUpdateProjectWithIdThenReturnUpdatedProject() {
-        final var updateProjectDto = buildUpdateProjectDtoWithId();
+    public void givenProjectInDatabaseWhenUpdateProjectThenReturnUpdatedProject() {
+        final var updateProjectDto = buildUpdateProjectDto();
         final var project = buildProject();
         final var projectDto = buildProjectDto();
 
@@ -179,7 +159,7 @@ public class ProjectServiceTest {
         when(projectRepository.save(project)).thenReturn(project);
         when(projectMapper.toProjectDto(project)).thenReturn(projectDto);
 
-        final var result = projectService.updateProject(updateProjectDto);
+        final var result = projectService.updateProject(PROJECT_1_ID, updateProjectDto);
 
         assertThat(result).isEqualTo(projectDto);
 
@@ -187,7 +167,7 @@ public class ProjectServiceTest {
         verify(projectMapper).updateProject(updateProjectDto, project);
         verify(projectRepository).save(project);
         verify(projectMapper).toProjectDto(project);
-     }
+    }
 
     @Test
     public void givenProjectInDatabaseWhenDeleteProjectThenDeleteProject() {

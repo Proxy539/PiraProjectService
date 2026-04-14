@@ -58,9 +58,9 @@ public class ProjectController {
         return projectService.saveProjectTicket(projectId, saveTicketDto);
     }
 
-    @PutMapping
-    public ProjectDto updateProject(@RequestBody @Valid UpdateProjectDto updateProjectDto) {
-        return projectService.updateProject(updateProjectDto);
+    @PutMapping("/{projectId}")
+    public ProjectDto updateProject(@PathVariable Long projectId, @RequestBody @Valid UpdateProjectDto updateProjectDto) {
+        return projectService.updateProject(projectId, updateProjectDto);
     }
 
     @PutMapping("/{projectId}/tickets")

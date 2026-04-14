@@ -97,25 +97,8 @@ public class ProjectUtils {
                 .build();
     }
 
-    public static UpdateProjectDto buildUpdateProjectDtoWithId() {
+    public static UpdateProjectDto buildUpdateProjectDto(String projectTitle, String projectDescription) {
         return UpdateProjectDto.builder()
-                .id(PROJECT_1_ID)
-                .title(PROJECT_1_TITLE)
-                .description(PROJECT_1_DESCRIPTION)
-                .build();
-    }
-
-    public static UpdateProjectDto buildUpdateProjectDto(String projectTitle, String projectDescrtiption) {
-        return UpdateProjectDto.builder()
-                .title(projectTitle)
-                .description(projectDescrtiption)
-                .build();
-    }
-
-    public static UpdateProjectDto buildUpdateProjectDto(Long projectId, String projectTitle,
-            String projectDescription) {
-        return UpdateProjectDto.builder()
-                .id(projectId)
                 .title(projectTitle)
                 .description(projectDescription)
                 .build();

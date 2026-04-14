@@ -4,7 +4,7 @@ import static com.proxy.pira.utils.ProjectUtils.PROJECT_1_ID;
 import static com.proxy.pira.utils.ProjectUtils.buildProjectDto;
 import static com.proxy.pira.utils.ProjectUtils.buildProjectDtos;
 import static com.proxy.pira.utils.ProjectUtils.buildSaveProjectDto;
-import static com.proxy.pira.utils.ProjectUtils.buildUpdateProjectDtoWithId;
+import static com.proxy.pira.utils.ProjectUtils.buildUpdateProjectDto;
 import static com.proxy.pira.utils.ProjectUtils.buildValidationErrorResponseDTO;
 import static com.proxy.pira.utils.TicketUtils.TICKET_1_ID;
 import static com.proxy.pira.utils.TicketUtils.buildSaveTicketDto;
@@ -47,7 +47,7 @@ public class ProjectControllerTest {
     private static final String GET_PROJECTS_URL = "/api/v1/projects";
     private static final String GET_PROJECT_BY_ID_URL = "/api/v1/projects/{id}";
     private static final String POST_PROJECTS_URL = "/api/v1/projects";
-    private static final String PUT_PROJECTS_URL = "/api/v1/projects";
+    private static final String PUT_PROJECTS_URL = "/api/v1/projects/{id}";
     private static final String DELETE_PROJECTS_URL = "/api/v1/projects/{id}";
     private static final String GET_PROJECT_TICKETS_URL = "/api/v1/projects/{projectId}/tickets";
     private static final String POST_PROJECT_TICKETS_URL = "/api/v1/projects/{projectId}/tickets";
@@ -143,18 +143,18 @@ public class ProjectControllerTest {
 
     @Test
     public void givenProjectInDatabaseWhenUpdateProjectThenReturnUpdatedProject() throws Exception {
-        final var updateProjectDto = buildUpdateProjectDtoWithId();
+        final var updateProjectDto = buildUpdateProjectDto();
         final var projectDto = buildProjectDto();
 
-        when(projectService.updateProject(updateProjectDto)).thenReturn(projectDto);
+        when(projectService.updateProject(PROJECT_1_ID, updateProjectDto)).thenReturn(projectDto);
 
-        mockMvc.perform(put(PUT_PROJECTS_URL)
+        mockMvc.perform(put(PUT_PROJECTS_URL, PROJECT_1_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateProjectDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(projectDto)));
 
-        verify(projectService).updateProject(updateProjectDto);
+        verify(projectService).updateProject(PROJECT_1_ID, updateProjectDto);
     }
 
     @Test
@@ -174,7 +174,7 @@ public class ProjectControllerTest {
         final var updateProjectDto = UpdateProjectDto.builder().build();
         final var errorBody = buildValidationErrorResponseDTO();
 
-        mockMvc.perform(put(PUT_PROJECTS_URL)
+        mockMvc.perform(put(PUT_PROJECTS_URL, PROJECT_1_ID)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateProjectDto)))
                 .andExpect(status().isBadRequest())
