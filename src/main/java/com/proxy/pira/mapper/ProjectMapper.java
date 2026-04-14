@@ -11,7 +11,7 @@ import com.proxy.pira.dto.SaveProjectDto;
 import com.proxy.pira.dto.UpdateProjectDto;
 import com.proxy.pira.entity.Project;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {TicketMapper.class})
 public interface ProjectMapper {
 
     ProjectDto toProjectDto(Project project);
