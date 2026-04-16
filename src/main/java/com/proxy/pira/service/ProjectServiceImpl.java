@@ -22,10 +22,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Default implementation of {@link ProjectService}.
+ * Spring-managed {@link ProjectService} backed by JPA repositories.
  *
- * <p>Delegates persistence to {@link ProjectRepository} and {@link TicketRepository},
- * and uses MapStruct mappers to convert between entities and DTOs.
+ * <p>All entity-to-DTO conversions are handled by MapStruct mappers injected
+ * via constructor. Throws {@link com.proxy.pira.exception.ResourceNotFoundException}
+ * whenever a requested resource cannot be found.
  */
 @Service
 @Slf4j
