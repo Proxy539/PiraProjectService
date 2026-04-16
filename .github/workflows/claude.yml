@@ -40,5 +40,5 @@ jobs:
           additional_permissions: |
             actions: read
 
-          allowed_tools: 'Bash(gh pr:*),Bash(gh issue:*),Edit,Write,Read,Glob,Grep'
+          claude_args: '--allowed-tools Bash(gh pr:*),Bash(gh issue:*),Edit,Write,Read,Glob,Grep'
 
