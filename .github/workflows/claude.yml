@@ -40,5 +40,8 @@ jobs:
           additional_permissions: |
             actions: read
 
+          custom_instructions: |
+            After completing any code changes and pushing a branch, always create a pull request using `gh pr create` with an appropriate title and body. Do not just provide a link — run the command yourself.
+
           claude_args: '--allowed-tools Bash(gh pr:*),Bash(gh issue:*),Edit,Write,Read,Glob,Grep'
 
