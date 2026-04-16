@@ -18,6 +18,7 @@ public interface TicketMapper {
 
     List<TicketDto> toTicketsDto(List<Ticket> tickets);
 
+    @Mapping(target = "status", expression = "java(com.proxy.pira.entity.TicketStatus.TO_DO)")
     Ticket toTicket(SaveTicketDto saveTicketDto);
 
     Ticket toTicket(UpdateTicketDto updateTicketDto);

@@ -74,9 +74,8 @@ class ProjectServiceImpl implements ProjectService {
         final var ticket = ticketMapper.toTicket(saveTicketDto);
 
         ticket.setProject(project);
-        project.getTickets().add(ticket);
 
-        projectRepository.save(project);
+        ticketRepository.save(ticket);
 
         return ticketMapper.toTicketDto(ticket);
 

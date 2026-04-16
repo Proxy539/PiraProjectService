@@ -223,7 +223,7 @@ public class ProjectServiceTest {
 
         verify(projectRepository).findById(PROJECT_1_ID);
         verify(ticketMapper).toTicket(saveTicketDto);
-        verify(projectRepository).save(project);
+        verify(ticketRepository).save(ticket);
         verify(ticketMapper).toTicketDto(ticket);
     }
 

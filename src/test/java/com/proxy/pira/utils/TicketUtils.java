@@ -12,6 +12,7 @@ import com.proxy.pira.dto.TicketDto;
 import com.proxy.pira.dto.UpdateTicketDto;
 import com.proxy.pira.entity.Project;
 import com.proxy.pira.entity.Ticket;
+import com.proxy.pira.entity.TicketPriority;
 import com.proxy.pira.entity.TicketStatus;
 import com.proxy.pira.entity.TicketType;
 
@@ -24,10 +25,13 @@ public class TicketUtils {
     public static final String TICKET_1_TITLE = "Ticket 1 title";
     public static final String TICKET_1_DESCRIPTION = "Ticket 1 description";
     public static final TicketType TICKET_1_TYPE = TicketType.STORY;
-    public static final TicketStatus TICKET_1_STATUS = TicketStatus.NEW;
+    public static final TicketPriority TICKET_1_PRIORITY = TicketPriority.MEDIUM;
+    public static final TicketStatus TICKET_1_STATUS = TicketStatus.TO_DO;
 
     private static final String TITLE_MUST_NOT_BE_BLANK = "title: must not be blank";
     private static final String DESCRIPTION_MUST_NOT_BE_BLANK = "description: must not be blank";
+    private static final String TYPE_MUST_NOT_BE_NULL = "type: must not be null";
+    private static final String PRIORITY_MUST_NOT_BE_NULL = "priority: must not be null";
 
     public static Ticket buildTicket() {
         return Ticket.builder()
@@ -61,6 +65,8 @@ public class TicketUtils {
         return SaveTicketDto.builder()
                 .title(TICKET_1_TITLE)
                 .description(TICKET_1_DESCRIPTION)
+                .type(TICKET_1_TYPE)
+                .priority(TICKET_1_PRIORITY)
                 .build();
     }
 
@@ -101,7 +107,7 @@ public class TicketUtils {
                 .service(ControllerAdvice.PIRA_SERVICE_NAME)
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(ProjectUtils.VALIDATION_FAILED_ERROR_MESSAGE)
-                .validationErrors(List.of(TITLE_MUST_NOT_BE_BLANK, DESCRIPTION_MUST_NOT_BE_BLANK))
+                .validationErrors(List.of(TITLE_MUST_NOT_BE_BLANK, DESCRIPTION_MUST_NOT_BE_BLANK, TYPE_MUST_NOT_BE_NULL, PRIORITY_MUST_NOT_BE_NULL))
                 .build();
     }
 
