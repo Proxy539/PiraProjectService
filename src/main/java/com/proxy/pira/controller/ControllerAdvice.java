@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.proxy.pira.dto.ErrorResponseDTO;
 import com.proxy.pira.exception.ResourceNotFoundException;
 
+/** Centralises exception-to-HTTP-response mapping for all controllers. */
 @RestControllerAdvice
 public class ControllerAdvice {
 
