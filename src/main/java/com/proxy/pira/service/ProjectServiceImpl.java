@@ -21,6 +21,12 @@ import com.proxy.pira.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Default implementation of {@link ProjectService}.
+ *
+ * <p>All write operations go through {@link ProjectRepository} or {@link TicketRepository}.
+ * MapStruct mappers handle entity↔DTO conversions so no manual field mapping is needed here.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +37,9 @@ class ProjectServiceImpl implements ProjectService {
     private final ProjectMapper projectMapper;
     private final TicketMapper ticketMapper;
 
+    /**
+     * Returns all projects in the database mapped to their DTO representation.
+     */
     @Override
     public List<ProjectDto> findAllProjects() {
         log.info("Finding all projects");
@@ -38,6 +47,11 @@ class ProjectServiceImpl implements ProjectService {
         return projectMapper.toProjectsDto(allProjects);
     }
 
+    /**
+     * Finds a single project by its ID.
+     *
+     * @throws ResourceNotFoundException if no project with the given ID exists
+     */
     @Override
     public ProjectDto findProjectById(Long projectId) {
         log.info("Finding project by id: {}", projectId);
@@ -46,6 +60,11 @@ class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(() -> new ResourceNotFoundException("Project was not found by id " + projectId));
     }
 
+    /**
+     * Returns all tickets that belong to the given project.
+     *
+     * @throws ResourceNotFoundException if no project with the given ID exists
+     */
     @Override
     public List<TicketDto> findProjectTickets(Long projectId) {
         log.info("Finding project tickets by project id {}", projectId);
@@ -55,6 +74,11 @@ class ProjectServiceImpl implements ProjectService {
         return ticketMapper.toTicketsDto(projectTickes);
     }
 
+    /**
+     * Creates a new project from the given DTO and persists it.
+     *
+     * @return the persisted project as a DTO (includes the generated ID)
+     */
     @Override
     public ProjectDto saveProject(SaveProjectDto saveProjectDto) {
         log.info("Saving project: {}", saveProjectDto);
@@ -64,6 +88,14 @@ class ProjectServiceImpl implements ProjectService {
         return projectMapper.toProjectDto(savedProject);
     }
 
+    /**
+     * Creates a new ticket and associates it with an existing project.
+     *
+     * <p>The project must exist before the ticket is saved; the foreign-key reference
+     * is set explicitly via {@link Ticket#setProject(Project)} before persisting.
+     *
+     * @throws ResourceNotFoundException if no project with {@code projectId} exists
+     */
     @Override
     public TicketDto saveProjectTicket(Long projectId, SaveTicketDto saveTicketDto) {
         log.info("Saving prject ticket: {}", saveTicketDto);
@@ -81,6 +113,14 @@ class ProjectServiceImpl implements ProjectService {
 
     }
 
+    /**
+     * Patches an existing project with the fields from {@code updateProjectDto}.
+     *
+     * <p>MapStruct's {@code @MappingTarget} is used to apply only the supplied fields onto
+     * the managed entity, avoiding a full replacement.
+     *
+     * @throws ResourceNotFoundException if no project with {@code projectId} exists
+     */
     @Override
     public ProjectDto updateProject(Long projectId, UpdateProjectDto updateProjectDto) {
         log.info("Updating project data: {}", updateProjectDto);
@@ -96,28 +136,53 @@ class ProjectServiceImpl implements ProjectService {
 
     }
 
+    /**
+     * Creates or updates a ticket on the given project.
+     *
+     * <p>Delegates the create-vs-update decision to {@link #saveOrUpdateTicket}.
+     *
+     * @throws ResourceNotFoundException if the project or ticket is not found
+     */
     @Override
     public TicketDto updateProjectTicket(Long projectId, UpdateTicketDto updateTicketDto) {
         log.info("Updating project ticket data: {}", updateTicketDto);
-        
+
         final var savedTicket = saveOrUpdateTicket(projectId, updateTicketDto);
 
         return ticketMapper.toTicketDto(savedTicket);
 
     }
 
+    /**
+     * Deletes a project by its ID (cascades to its tickets via the database).
+     */
     @Override
     public void deleteProject(Long projectId) {
         log.info("Deleting project by id: {}", projectId);
         projectRepository.deleteById(projectId);
     }
 
+    /**
+     * Deletes a specific ticket that belongs to the given project.
+     *
+     * <p>Both {@code projectId} and {@code ticketId} are required so that a ticket
+     * cannot be deleted via a project it does not belong to.
+     */
     @Override
     public void deleteProjectTicket(Long projectId, Long ticketId) {
         log.info("Deleting project {} ticket by id {}", projectId, ticketId);
         ticketRepository.deleteByProjectIdAndId(projectId, ticketId);
     }
 
+    /**
+     * Creates a new ticket when {@code updateTicketDto.getId()} is {@code null};
+     * otherwise fetches the existing ticket and patches it in place.
+     *
+     * <p>This dual create/update behaviour lets callers use a single PUT endpoint
+     * for both scenarios without a separate POST.
+     *
+     * @throws ResourceNotFoundException if the project or the existing ticket is not found
+     */
     private Ticket saveOrUpdateTicket(Long projectId, UpdateTicketDto updateTicketDto) {
         if (updateTicketDto.getId() == null) {
             final var ticket = ticketMapper.toTicket(updateTicketDto);
@@ -126,9 +191,9 @@ class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(() -> new ResourceNotFoundException("Project was not found by id " + updateTicketDto.getProjectId()));
 
             savedProject.getTickets().add(ticket);
-            
+
             return ticket;
-            
+
         } else {
             final var ticket = ticketRepository
                     .findByProjectIdAndId(updateTicketDto.getProjectId(), updateTicketDto.getId())
