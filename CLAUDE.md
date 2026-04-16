@@ -51,3 +51,8 @@ This is a Spring Boot 4.0 REST API (Java 25) for managing projects, backed by Po
 ## GitHub Bot Instructions
 
 After completing all code changes, always create a pull request automatically using `gh pr create`. Do not just provide a link to create a PR — submit it yourself. Link the PR to the issue it resolves.
+
+Always include the following trailer in every commit message:
+```
+Co-Authored-By: claude[bot] <209825114+claude[bot]@users.noreply.github.com>
+```
