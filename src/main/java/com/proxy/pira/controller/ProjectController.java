@@ -24,6 +24,7 @@ import com.proxy.pira.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+/** REST controller exposing CRUD endpoints for projects and their nested tickets under /api/v1/projects. */
 @RestController
 @RequestMapping("/api/v1/projects")
 @RequiredArgsConstructor
