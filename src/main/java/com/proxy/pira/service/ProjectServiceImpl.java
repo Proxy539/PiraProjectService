@@ -50,9 +50,9 @@ class ProjectServiceImpl implements ProjectService {
     public List<TicketDto> findProjectTickets(Long projectId) {
         log.info("Finding project tickets by project id {}", projectId);
 
-        final var projectTickes = ticketRepository.findByProjectId(projectId);
+        final var projectTickets = ticketRepository.findByProjectId(projectId);
 
-        return ticketMapper.toTicketsDto(projectTickes);
+        return ticketMapper.toTicketsDto(projectTickets);
     }
 
     @Override
@@ -66,7 +66,7 @@ class ProjectServiceImpl implements ProjectService {
 
     @Override
     public TicketDto saveProjectTicket(Long projectId, SaveTicketDto saveTicketDto) {
-        log.info("Saving prject ticket: {}", saveTicketDto);
+        log.info("Saving project ticket: {}", saveTicketDto);
 
         final var project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Project was not found by id " + projectId));
