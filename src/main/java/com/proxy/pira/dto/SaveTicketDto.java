@@ -1,5 +1,9 @@
 package com.proxy.pira.dto;
 
+import com.proxy.pira.entity.TicketPriority;
+import com.proxy.pira.entity.TicketType;
+import jakarta.validation.constraints.NotNull;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +20,9 @@ public class SaveTicketDto {
     private String title;
     @NotBlank
     private String description;
+    @NotNull
+    private TicketType type;
+    @NotNull
+    private TicketPriority priority;
 
 }

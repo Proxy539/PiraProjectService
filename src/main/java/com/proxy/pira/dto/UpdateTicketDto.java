@@ -1,5 +1,6 @@
 package com.proxy.pira.dto;
 
+import com.proxy.pira.entity.TicketPriority;
 import com.proxy.pira.entity.TicketStatus;
 import com.proxy.pira.entity.TicketType;
 
@@ -19,6 +20,7 @@ public class UpdateTicketDto {
     private String title;
     private String description;
     private TicketType type;
+    private TicketPriority priority;
     private TicketStatus status;
     
 }

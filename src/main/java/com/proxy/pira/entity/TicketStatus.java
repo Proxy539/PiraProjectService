@@ -1,5 +1,5 @@
 package com.proxy.pira.entity;
 
 public enum TicketStatus {
-    NEW, READY, DEV, REVIEW, DONE
+    TO_DO, IN_PROGRES, IN_REVIEW, DONE
 }
