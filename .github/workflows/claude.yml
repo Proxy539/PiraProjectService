@@ -37,6 +37,4 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
           claude_args: '--allowed-tools Bash(gh pr:*),Bash(gh issue:*),Bash(git *),Bash(./gradlew *),Bash(docker *),Edit,Write,Read,Glob,Grep'
-          prompt: |
-            After completing all code changes, always create a pull request automatically using `gh pr create`. Do not just provide a link to create a PR — submit it yourself. Link the PR to the issue it resolves.
 
