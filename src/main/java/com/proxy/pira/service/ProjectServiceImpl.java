@@ -118,6 +118,7 @@ class ProjectServiceImpl implements ProjectService {
         ticketRepository.deleteByProjectIdAndId(projectId, ticketId);
     }
 
+    // Upsert: creates a new ticket when id is absent, otherwise patches the existing one.
     private Ticket saveOrUpdateTicket(Long projectId, UpdateTicketDto updateTicketDto) {
         if (updateTicketDto.getId() == null) {
             final var ticket = ticketMapper.toTicket(updateTicketDto);
