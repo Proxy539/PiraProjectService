@@ -26,9 +26,16 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 class ProjectServiceImpl implements ProjectService {
 
+    /** Repository for performing CRUD operations on {@link com.proxy.pira.entity.Project} entities. */
     private final ProjectRepository projectRepository;
+
+    /** Repository for performing CRUD operations on {@link com.proxy.pira.entity.Ticket} entities. */
     private final TicketRepository ticketRepository;
+
+    /** Mapper for converting between {@link com.proxy.pira.entity.Project} entities and project DTOs. */
     private final ProjectMapper projectMapper;
+
+    /** Mapper for converting between {@link com.proxy.pira.entity.Ticket} entities and ticket DTOs. */
     private final TicketMapper ticketMapper;
 
     @Override
